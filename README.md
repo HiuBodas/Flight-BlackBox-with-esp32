@@ -1,7 +1,7 @@
-<p>Kelmopok 2</p>
+<p>Kelompok 2</p>
 <P>1. khoirul umam(23552011428)</P>
 <p>2. </p>
-<p>3. </p>
+<p>3. Dianne Ramadhani (23552011364) </p>
 
 
 
