@@ -1,11 +1,6 @@
 #pragma once
-
-#ifdef ARDUINO
 #include <pgmspace.h>
-#else
-#define PROGMEM
-#endif
- 
+
 const char INDEX_HTML[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +12,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
   :root{
     --page:#f6f9ff; --panel:#ffffff; --panel2:#f8fbff;
     --text:#0a2742; --muted:#647e97; --border:#e3ecf7; --grid:#e9eef6;
-    --blue:#2b76ff; --vio:#7b61ff; --teal:#15b89a; --orange:#ff8c3a;
+    --blue:#2b76ff; --vio:#7b61ff; --teal:#15b89a; --orange:#ff8c3a; --red:#ef4444; --green:#19b36b;
     --shadow: 0 8px 22px rgba(21,44,88,.10); --radius: 14px;
     --kpi-h: 86px; --plane-h: 160px; --chart-h: 100px; --gutter: 12px; --pad: 10px; --title: 12px; --val: 22px;
   }
@@ -40,28 +35,63 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
   @keyframes spin{to{transform:rotate(360deg)}}
   header h1{margin:0;font-size:14px;letter-spacing:.2px;font-weight:800}
   header .pill{margin-left:auto;font-size:11px;color:var(--muted); padding:4px 8px;border-radius:999px;border:1px solid var(--border); background: var(--panel); box-shadow: var(--shadow);}
- 
+
   main{ padding:12px; display:grid; gap:var(--gutter); grid-template-columns:repeat(12,1fr); max-width:1180px; margin:0 auto; }
   .card{ grid-column:span 12; position:relative; overflow:hidden; border-radius:var(--radius); padding:var(--pad); border:1px solid var(--border); background: linear-gradient(180deg, var(--panel), var(--panel2)); box-shadow: var(--shadow); }
   .row{display:grid; gap:var(--gutter); grid-template-columns:repeat(12,1fr)}
   .span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-12{grid-column:span 12}
- 
+
   .kpi{ border:1px solid var(--border); border-radius:12px; padding:8px; min-height:var(--kpi-h); background: linear-gradient(180deg,#ffffff,#f8fbff); }
   .kpi h3{ margin:0 0 4px; color:var(--muted); font-size:var(--title); font-weight:800; letter-spacing:.2px }
   .kpi .val{ font-size:var(--val); font-weight:900; letter-spacing:.2px }
   .kpi .sub{ color:var(--muted); font-size:10px; margin-left:6px }
- 
+
   .chart{ height:var(--chart-h); border-radius:12px; border:1px solid var(--border); background: linear-gradient(180deg,#ffffff,#f7faff); position:relative; overflow:hidden }
   .chart canvas{ width:100%; height:100%; display:block }
   .chart .shine{ position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(0,0,0,.04), transparent); transform:translateX(-100%); animation: sweep 7s ease-in-out infinite }
   @keyframes sweep{50%{transform:translateX(100%)}100%{transform:translateX(100%)}}
- 
+
   /* Bullet key-value rows (no numbers) */
   .kv{ display:grid; grid-template-columns: 12px 1fr auto; align-items:center; gap:6px 10px; }
   .bullet{ width:8px; height:8px; border-radius:50%; background:#0a2742; box-shadow: 0 1px 3px rgba(0,0,0,.15); }
   .label{ font-size:12px; color:var(--muted) }
   .val{ font-weight:800; font-size:13px; color:var(--text) }
- 
+
+  /* Status pills (system health) */
+  .status-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:var(--gutter) }
+  .status-box{ border:1px solid var(--border); border-radius:12px; padding:10px; background:linear-gradient(180deg,#ffffff,#f8fbff); display:flex; align-items:center; gap:8px }
+  .status-dot{ width:10px; height:10px; border-radius:50%; flex:0 0 auto; background:var(--muted); box-shadow:0 0 0 3px rgba(0,0,0,.04); transition:background .2s }
+  .status-dot.ok{ background:var(--green); box-shadow:0 0 0 3px rgba(25,179,107,.15) }
+  .status-dot.bad{ background:var(--red); box-shadow:0 0 0 3px rgba(239,68,68,.15) }
+  .status-box .label{ font-size:11px; color:var(--muted); display:block }
+  .status-box .val{ font-size:13px; font-weight:800 }
+
+  /* Recording control */
+  .rec-row{ display:flex; align-items:center; gap:14px; flex-wrap:wrap }
+  .rec-indicator{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px }
+  .rec-led{ width:12px; height:12px; border-radius:50%; background:var(--muted) }
+  .rec-led.on{ background:var(--red); box-shadow:0 0 0 4px rgba(239,68,68,.18); animation: pulse 1.1s ease-in-out infinite }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  button.btn{
+    appearance:none; border:none; cursor:pointer; font-weight:800; font-size:13px;
+    padding:9px 16px; border-radius:10px; color:#fff; letter-spacing:.2px;
+    background:linear-gradient(180deg, var(--blue), #1d5fe0); box-shadow:0 6px 16px rgba(43,118,255,.30);
+    transition: transform .08s ease, box-shadow .08s ease;
+  }
+  button.btn:active{ transform:translateY(1px); box-shadow:0 3px 10px rgba(43,118,255,.25) }
+  button.btn.danger{ background:linear-gradient(180deg, var(--red), #c92f2f); box-shadow:0 6px 16px rgba(239,68,68,.30) }
+  button.btn.ghost{ background:linear-gradient(180deg,#ffffff,#f3f6fb); color:var(--text); border:1px solid var(--border); box-shadow:none }
+  .meta-pill{ font-size:11px; color:var(--muted); padding:4px 8px; border-radius:999px; border:1px solid var(--border); background:#fff }
+
+  /* Log file table */
+  .log-table{ width:100%; border-collapse:collapse; font-size:12.5px }
+  .log-table th{ text-align:left; color:var(--muted); font-weight:700; padding:6px 8px; border-bottom:1px solid var(--border) }
+  .log-table td{ padding:7px 8px; border-bottom:1px solid var(--grid) }
+  .log-table tr:last-child td{ border-bottom:none }
+  .log-table .dl{ color:var(--blue); font-weight:800; text-decoration:none; cursor:pointer }
+  .log-table .dl:hover{ text-decoration:underline }
+  .empty-row{ color:var(--muted); font-style:italic; padding:10px 8px; font-size:12px }
+
   /* Attitude */
   .plane-wrap{ position:relative; height:var(--plane-h); border-radius:12px; border:1px solid var(--border); background: linear-gradient(180deg,#ffffff,#f6f9ff); overflow:hidden }
   .sky{ position:absolute; inset:0; opacity:.45; background:
@@ -76,12 +106,12 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
   .plane svg{ width:96px; height:96px }
   .plane path{ fill:url(#fuselageDark); stroke:#324b77; stroke-width:.8 }
   .bank-glow{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:180px; height:180px; border-radius:50%; background:radial-gradient(closest-side, rgba(30,70,140,.14), transparent 70%) }
- 
+
   h3[accent]{ font-weight:800; font-size:var(--title); letter-spacing:.2px; margin:0 0 8px; color:var(--muted) }
   h3 .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:middle }
-  .blue .dot{ background:var(--blue) } .vio .dot{ background:var(--vio) } .teal .dot{ background:var(--teal) } .orange .dot{ background:var(--orange) }
- 
-  @media (max-width: 980px){ .span-7,.span-5{grid-column:span 12} :root{ --plane-h: 180px } }
+  .blue .dot{ background:var(--blue) } .vio .dot{ background:var(--vio) } .teal .dot{ background:var(--teal) } .orange .dot{ background:var(--orange) } .red .dot{ background:var(--red) }
+
+  @media (max-width: 980px){ .span-7,.span-5{grid-column:span 12} .status-grid{grid-template-columns:repeat(2,1fr)} :root{ --plane-h: 180px } }
 </style>
 </head>
 <body>
@@ -90,8 +120,58 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     <h1>Flight Black-Box Motion Recorder System</h1>
     <div class="pill" id="uptime">—</div>
   </header>
- 
+
   <main>
+    <!-- System Status Row -->
+    <section class="card span-12" style="padding:8px;">
+      <h3 class="blue" accent><span class="dot"></span>System Status</h3>
+      <div class="status-grid">
+        <div class="status-box">
+          <div class="status-dot" id="dotWifi"></div>
+          <div>
+            <span class="label">WiFi</span>
+            <span class="val" id="valWifi">—</span>
+          </div>
+        </div>
+        <div class="status-box">
+          <div class="status-dot" id="dotSensor"></div>
+          <div>
+            <span class="label">BMI160 Sensor</span>
+            <span class="val" id="valSensor">—</span>
+          </div>
+        </div>
+        <div class="status-box">
+          <div class="status-dot" id="dotSd"></div>
+          <div>
+            <span class="label">MicroSD</span>
+            <span class="val" id="valSd">—</span>
+          </div>
+        </div>
+        <div class="status-box">
+          <div class="status-dot" id="dotMqtt"></div>
+          <div>
+            <span class="label">MQTT</span>
+            <span class="val" id="valMqtt">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recording Control -->
+    <section class="card span-12" style="padding:8px;">
+      <h3 class="red" accent><span class="dot"></span>Recording Control</h3>
+      <div class="rec-row">
+        <div class="rec-indicator">
+          <div class="rec-led" id="recLed"></div>
+          <span id="recText">IDLE</span>
+        </div>
+        <button class="btn" id="btnRec">Start Recording</button>
+        <button class="btn ghost" id="btnResetPeaks">Reset Peaks</button>
+        <span class="meta-pill" id="curFile">File: —</span>
+        <span class="meta-pill" id="curLines">Lines: —</span>
+      </div>
+    </section>
+
     <!-- KPI Row -->
     <section class="card span-12" style="padding:8px;">
       <div class="row">
@@ -125,7 +205,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
         </div>
       </div>
     </section>
- 
+
     <!-- Visualizer (7) + Diagnostics (5) -->
     <section class="card span-12" style="padding:8px;">
       <div class="row">
@@ -150,7 +230,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
             </div>
           </div>
         </div>
- 
+
         <!-- Diagnostics: ax/ay/az (left column), gx/gy/gz (right column) -->
         <div class="span-5">
           <h3 class="vio" accent><span class="dot"></span>Diagnostics (axes)</h3>
@@ -169,7 +249,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
         </div>
       </div>
     </section>
- 
+
     <!-- Peaks & Events (bulleted, tidy) -->
     <section class="card span-12" style="padding:8px;">
       <div class="row">
@@ -195,7 +275,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
         </div>
       </div>
     </section>
- 
+
     <!-- Charts Row -->
     <section class="card span-12" style="padding:8px;">
       <div class="row">
@@ -213,13 +293,31 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
         </div>
       </div>
     </section>
+
+    <!-- SD Card Log Files -->
+    <section class="card span-12" style="padding:8px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <h3 class="teal" accent style="margin:0;"><span class="dot"></span>Log Files (MicroSD)</h3>
+        <button class="btn ghost" id="btnRefreshLogs">Refresh</button>
+      </div>
+      <div style="overflow-x:auto; margin-top:8px;">
+        <table class="log-table">
+          <thead>
+            <tr><th>File Name</th><th>Size</th><th>Action</th></tr>
+          </thead>
+          <tbody id="logTableBody">
+            <tr><td colspan="3" class="empty-row">Loading log list…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
- 
+
 <script>
 (() => {
   const el = id => document.getElementById(id);
   const G = 9.81; // m/s² per g
- 
+
   function makeChart(canvasId, ymax, colorTop, colorBottom) {
     const c = el(canvasId), ctx = c.getContext('2d');
     const W = c.width = c.clientWidth || 360;
@@ -245,14 +343,20 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     function push(v){ data.push(v); data.shift(); draw(); }
     draw(); return { push };
   }
- 
+
   const chartAccel = makeChart('cAccel', 2*G, 'rgba(43,118,255,0.95)','rgba(43,118,255,0.20)');
   const chartGyro  = makeChart('cGyro', 1200.0, 'rgba(123,97,255,0.95)','rgba(123,97,255,0.20)');
   const chartVib   = makeChart('cVib', 2*G, 'rgba(21,184,154,0.95)','rgba(21,184,154,0.20)');
- 
+
   function fmtMs(ms){ if(!ms) return 'None'; if(ms<1000) return ms+' ms'; const s=Math.floor(ms/1000); return s<60? s+' s' : Math.floor(s/60)+' min'; }
+  function fmtBytes(b){ if(b<1024) return b+' B'; if(b<1024*1024) return (b/1024).toFixed(1)+' KB'; return (b/1024/1024).toFixed(2)+' MB'; }
   function clamp(v,lo,hi){ return v<lo?lo:v>hi?hi:v; }
- 
+
+  function setStatus(dotId, valId, ok, okText, badText){
+    el(dotId).className = 'status-dot ' + (ok ? 'ok' : 'bad');
+    el(valId).textContent = ok ? okText : badText;
+  }
+
   function updatePlane(roll, pitch){
     const p = el('plane'), h = el('horizon'), glow = el('bankGlow');
     const r = clamp(roll,-70,70), pch = clamp(pitch,-35,35);
@@ -260,19 +364,69 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
     h.style.transform = `translateY(-50%) rotate(${-r*0.6}deg) translateY(${pch*1.1}px)`;
     glow.style.background = `radial-gradient(closest-side, rgba(30,70,140,${Math.min(0.08 + Math.abs(r)/180, 0.18)}), transparent 70%)`;
   }
- 
+
+  let isRecording = false;
+
+  function updateRecordingUI(rec){
+    isRecording = rec;
+    el('recLed').className = 'rec-led' + (rec ? ' on' : '');
+    el('recText').textContent = rec ? 'RECORDING' : 'IDLE';
+    const btn = el('btnRec');
+    btn.textContent = rec ? 'Stop Recording' : 'Start Recording';
+    btn.className = 'btn' + (rec ? ' danger' : '');
+  }
+
+  async function loadLogs(){
+    const body = el('logTableBody');
+    try{
+      const r = await fetch('/logs', {cache:'no-store'});
+      const list = await r.json();
+      if(!list.length){
+        body.innerHTML = '<tr><td colspan="3" class="empty-row">No log files yet. Start a recording to create one.</td></tr>';
+        return;
+      }
+      body.innerHTML = list.map(f => `
+        <tr>
+          <td>${f.name}</td>
+          <td>${fmtBytes(f.size)}</td>
+          <td><a class="dl" href="/download?file=${encodeURIComponent(f.name.split('/').pop())}">Download CSV</a></td>
+        </tr>
+      `).join('');
+    }catch(e){
+      body.innerHTML = '<tr><td colspan="3" class="empty-row">Failed to load log list.</td></tr>';
+    }
+  }
+
+  el('btnRec').addEventListener('click', async () => {
+    el('btnRec').disabled = true;
+    try{
+      const r = await fetch('/record/toggle', {method:'POST'});
+      const d = await r.json();
+      updateRecordingUI(d.recording);
+      if(!d.recording) loadLogs(); // refresh list after stopping (new file finalized)
+    }catch(e){}
+    finally{ el('btnRec').disabled = false; }
+  });
+
+  el('btnResetPeaks').addEventListener('click', async () => {
+    if(!confirm('Reset all peak values (Max/Min G, DPS, Vibration)?')) return;
+    try{ await fetch('/peaks/reset', {method:'POST'}); }catch(e){}
+  });
+
+  el('btnRefreshLogs').addEventListener('click', loadLogs);
+
   async function tick(){
     try{
       const r = await fetch('/data',{cache:'no-store'});
       if(!r.ok) throw new Error('HTTP '+r.status);
       const d = await r.json();
- 
+
       // g -> m/s² conversions
       const nowA_ms2 = d.nowG*G, vib_ms2 = d.vibRms*G;
       const ax_ms2 = d.ax*G, ay_ms2 = d.ay*G, az_ms2 = d.az*G;
       const maxA_ms2 = d.peaks.maxG*G, minA_ms2 = d.peaks.minG*G;
       const lastImp_ms2 = d.peaks.lastImpactG*G, maxVib_ms2 = d.peaks.maxVib*G;
- 
+
       // KPIs
       el('nowA_ms2').textContent = nowA_ms2.toFixed(2);
       el('gyroAbs').textContent  = Math.round(d.gyroAbs);
@@ -284,7 +438,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       el('addr').textContent     = `I²C: 0x${d.addr.toString(16)}`;
       el('lastEvent').textContent= fmtMs(d.lastEventAgeMs);
       el('uptime').textContent   = d.uptime;
- 
+
       // Diagnostics
       el('ax_ms2').textContent = ax_ms2.toFixed(2);
       el('ay_ms2').textContent = ay_ms2.toFixed(2);
@@ -292,7 +446,7 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       el('gx').textContent = Math.round(d.gx);
       el('gy').textContent = Math.round(d.gy);
       el('gz').textContent = Math.round(d.gz);
- 
+
       // Peaks & events
       el('maxA_ms2').textContent     = maxA_ms2.toFixed(2);
       el('minA_ms2').textContent     = minA_ms2.toFixed(2);
@@ -302,20 +456,35 @@ const char INDEX_HTML[] PROGMEM = R"rawliteral(
       el('lastImpact_ms2').textContent= lastImp_ms2.toFixed(2);
       el('freefalls').textContent    = d.counts.freefalls;
       el('impacts').textContent      = d.counts.impacts;
- 
+
+      // System status
+      if(d.system){
+        setStatus('dotWifi','valWifi', d.system.wifi, 'Connected', 'Disconnected');
+        setStatus('dotSd','valSd', d.system.sd, 'Ready', 'Not Found');
+        setStatus('dotMqtt','valMqtt', d.system.mqtt, 'Connected', 'Disconnected');
+        setStatus('dotSensor','valSensor', true, 'OK', 'Error'); // sensor implied OK if /data responds with fresh values
+
+        if(d.system.recording !== isRecording) updateRecordingUI(d.system.recording);
+        el('curFile').textContent = 'File: ' + (d.system.logFile && d.system.logFile.length ? d.system.logFile.split('/').pop() : '—');
+        el('curLines').textContent = 'Lines: ' + d.system.logLines;
+      }
+
       // Charts
       chartAccel.push(Math.min(2*G, Math.abs(d.nowG - 1.0)*G));
       chartGyro.push(Math.min(1200, d.gyroAbs));
       chartVib.push(Math.min(2*G, vib_ms2));
- 
+
       updatePlane(d.roll, d.pitch);
     }catch(e){
-      // silent retry
+      setStatus('dotWifi','valWifi', false, 'Connected', 'Disconnected');
     }finally{
       setTimeout(tick, 120);
     }
   }
+
+  loadLogs();
   tick();
+  setInterval(loadLogs, 8000); // auto-refresh log list every 8s (catches files created via long-press button)
 })();
 </script>
 </body>
