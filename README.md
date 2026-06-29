@@ -1,6 +1,6 @@
-<p>Kelompok 2</p>
+<h2>Kelompok 2</h2>
 <P>1. khoirul umam(23552011428)</P>
-<p>2. </p>
+<p>2. Azmi Fauzan Alwan</p>
 <p>3. Dianne Ramadhani (23552011364) </p>
 
 
@@ -119,12 +119,16 @@ penerbangan yang telah tersertifikasi dan tidak digunakan sebagai perangkat kese
   </tbody>
 </table>
 
-<p>
-Pada rancangan ini, sumber daya berasal langsung dari USB laptop. Baterai dan
-buck-boost converter tidak digunakan.
-</p>
 
 <h2>4. Koneksi Pin</h2>
+
+<h3>Diagram Pinout dan Rangkaian</h3>
+
+<p> Berikut merupakan diagram pinout dan koneksi seluruh komponen pada Flight Black-Box Motion Recorder. </p>
+
+<div align="center"> <img src="images/pinout-rangkaian.png" alt="Diagram pinout dan rangkaian Flight Black-Box Motion Recorder" width="850" > <br> <sub>Diagram koneksi Wemos D1 R32 ESP32, BMI160, OLED, microSD, push button, dan buzzer.</sub> </div>
+
+<br>
 
 <h3>BMI160 dan OLED</h3>
 
@@ -484,33 +488,8 @@ ESP32 menggunakan laptop atau telepon seluler yang berada pada jaringan Wi-Fi ya
   </tbody>
 </table>
 
-<h2>14. Komunikasi MQTT</h2>
 
-<p>
-MQTT digunakan untuk mengirim data dari ESP32 ke broker lokal, misalnya Mosquitto.
-Pada program ini terdapat tiga topik utama:
-</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Topik</th>
-      <th>Isi</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><code>blackbox/telemetry</code></td><td>Data sensor, orientasi, getaran, frekuensi, dan status rekaman.</td></tr>
-    <tr><td><code>blackbox/status</code></td><td>Status ESP32, misalnya <code>online</code>.</td></tr>
-    <tr><td><code>blackbox/event</code></td><td>Pesan <code>freefall</code> atau <code>impact</code>.</td></tr>
-  </tbody>
-</table>
-
-<p>
-Telemetri MQTT dikirim setiap sekitar satu detik. MQTT bersifat tambahan; pembacaan sensor,
-OLED, dan perekaman microSD tetap dapat berjalan walaupun broker MQTT tidak terhubung.
-</p>
-
-<h2>15. Indikator Buzzer</h2>
+<h2>14. Indikator Buzzer</h2>
 
 <table>
   <thead>
@@ -530,16 +509,8 @@ OLED, dan perekaman microSD tetap dapat berjalan walaupun broker MQTT tidak terh
 Durasi bunyi untuk kejadian dapat berbeda, tetapi jumlah bunyi digunakan sebagai indikator utama.
 </p>
 
-<h2>16. Penyimpanan Internal ESP32</h2>
 
-<p>
-Program menggunakan <code>Preferences</code> atau NVS untuk menyimpan hasil kalibrasi,
-nilai maksimum dan minimum, serta jumlah kejadian. Data tersebut tetap tersedia setelah
-ESP32 dimatikan dan dinyalakan kembali. Nilai puncak dan penghitung kejadian dapat dihapus
-melalui dashboard, sedangkan offset kalibrasi diperbarui melalui proses kalibrasi ulang.
-</p>
-
-<h2>17. Pembagian Tugas dengan FreeRTOS</h2>
+<h2>15. Pembagian Tugas dengan FreeRTOS</h2>
 
 <p>
 Agar proses pembacaan sensor tidak terganggu oleh jaringan atau buzzer, program membagi pekerjaan
@@ -578,7 +549,7 @@ Mutex digunakan untuk mencegah beberapa task mengakses I²C, microSD, atau data 
 pada saat yang sama.
 </p>
 
-<h2>18. Struktur Folder</h2>
+<h2>16. Struktur Folder</h2>
 
 <pre>
 Flight-Black-Box/
@@ -593,34 +564,8 @@ Flight-Black-Box/
   <li><code>README.md</code>: dokumentasi proyek.</li>
 </ul>
 
-<h2>19. Library yang Dibutuhkan</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Library</th>
-      <th>Kegunaan</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><code>Wire.h</code></td><td>Komunikasi I²C dengan BMI160 dan OLED.</td></tr>
-    <tr><td><code>SPI.h</code></td><td>Komunikasi SPI dengan modul microSD.</td></tr>
-    <tr><td><code>SD.h</code></td><td>Membaca dan menulis file pada microSD.</td></tr>
-    <tr><td><code>Adafruit_GFX.h</code></td><td>Fungsi grafis untuk OLED.</td></tr>
-    <tr><td><code>Adafruit_SSD1306.h</code></td><td>Mengendalikan OLED SSD1306.</td></tr>
-    <tr><td><code>Preferences.h</code></td><td>Menyimpan kalibrasi dan nilai puncak di NVS.</td></tr>
-    <tr><td><code>WiFi.h</code></td><td>Menghubungkan ESP32 ke jaringan Wi-Fi.</td></tr>
-    <tr><td><code>WebServer.h</code></td><td>Menjalankan dashboard web lokal.</td></tr>
-    <tr><td><code>PubSubClient.h</code></td><td>Menghubungkan ESP32 dengan broker MQTT.</td></tr>
-  </tbody>
-</table>
-
-<p>
-BMI160 dibaca langsung melalui register I²C, sehingga program tidak menggunakan library BMI160 tambahan.
-Alamat sensor diperiksa pada <code>0x68</code> dan <code>0x69</code>.
-</p>
-
-<h2>20. Konfigurasi Sebelum Upload</h2>
+<h2>17. Konfigurasi Sebelum Upload</h2>
 
 <p>Ubah konfigurasi berikut sesuai jaringan yang digunakan:</p>
 
@@ -639,24 +584,8 @@ Jangan menyimpan nama Wi-Fi, password, atau kredensial MQTT asli di repository G
 Gunakan data contoh, file konfigurasi terpisah, atau GitHub Secrets bila diperlukan.
 </blockquote>
 
-<h2>21. Langkah Menjalankan Proyek</h2>
 
-<ol>
-  <li>Rangkai seluruh komponen sesuai tabel koneksi pin.</li>
-  <li>Masukkan kartu microSD yang telah diformat, misalnya FAT32.</li>
-  <li>Hubungkan Wemos D1 R32 ke laptop menggunakan kabel USB.</li>
-  <li>Buka proyek menggunakan Arduino IDE.</li>
-  <li>Pasang library Adafruit GFX, Adafruit SSD1306, dan PubSubClient.</li>
-  <li>Pastikan file <code>webpage.h</code> berada dalam folder yang sama dengan program utama.</li>
-  <li>Ubah konfigurasi Wi-Fi dan MQTT.</li>
-  <li>Pilih board ESP32 yang sesuai dan port yang terdeteksi.</li>
-  <li>Unggah program ke ESP32.</li>
-  <li>Buka Serial Monitor dengan baud rate <code>115200</code>.</li>
-  <li>Catat alamat IP ESP32 yang tampil pada Serial Monitor atau halaman Status OLED.</li>
-  <li>Buka alamat IP tersebut melalui browser pada jaringan Wi-Fi yang sama.</li>
-</ol>
-
-<h2>22. Kalibrasi Sensor</h2>
+<h2>18. Kalibrasi Sensor</h2>
 
 <ol>
   <li>Matikan atau lepaskan daya ESP32.</li>
@@ -672,50 +601,8 @@ Program mengambil 200 sampel untuk menentukan offset accelerometer dan gyroscope
 Hasil kalibrasi disimpan di NVS sehingga tidak perlu dilakukan setiap kali alat dinyalakan.
 </p>
 
-<h2>23. Pengujian Sederhana</h2>
 
-<ol>
-  <li>Letakkan alat diam dan periksa apakah G-force mendekati 1 g.</li>
-  <li>Miringkan alat untuk melihat perubahan nilai roll dan pitch.</li>
-  <li>Putar alat secara perlahan untuk melihat perubahan gyroscope.</li>
-  <li>Goyangkan alat secara ringan untuk melihat perubahan vibration RMS.</li>
-  <li>Tekan tombol singkat untuk berpindah halaman OLED.</li>
-  <li>Tekan tombol sekitar 1,2 detik untuk memulai perekaman.</li>
-  <li>Gerakkan alat, kemudian hentikan perekaman dengan tekan lama kembali.</li>
-  <li>Buka dashboard dan periksa daftar file log.</li>
-  <li>Unduh file CSV dan buka menggunakan spreadsheet.</li>
-</ol>
-
-<blockquote>
-Jangan menjatuhkan atau membenturkan alat dengan keras. Untuk menguji event, gunakan gerakan
-terkontrol dan lindungi rangkaian agar komponen tidak rusak.
-</blockquote>
-
-<h2>24. Penjelasan Singkat untuk Presentasi</h2>
-
-<p>
-Flight Black-Box Motion Recorder adalah prototipe pencatat gerakan berbasis ESP32.
-Sensor BMI160 membaca percepatan dan kecepatan rotasi pada tiga sumbu. Data tersebut
-diolah menjadi G-force, getaran, roll, pitch, serta informasi benturan dan jatuh bebas.
-Hasil pengukuran ditampilkan melalui OLED dan dashboard web, kemudian dapat disimpan
-ke microSD dalam format CSV. Sistem juga mendukung MQTT untuk mengirim telemetri ke
-broker lokal. Pembagian tugas menggunakan FreeRTOS membuat pembacaan sensor, jaringan,
-dan buzzer dapat bekerja secara bersamaan tanpa saling menghambat.
-</p>
-
-<h2>25. Contoh Alur Presentasi</h2>
-
-<ol>
-  <li><b>Latar belakang:</b> diperlukan alat yang dapat mencatat gerakan dan kejadian penting pada objek bergerak.</li>
-  <li><b>Input:</b> BMI160 membaca percepatan dan rotasi.</li>
-  <li><b>Proses:</b> ESP32 menghitung G-force, getaran, orientasi, free fall, dan impact.</li>
-  <li><b>Output:</b> data ditampilkan pada OLED dan dashboard web.</li>
-  <li><b>Penyimpanan:</b> data direkam ke microSD sebagai file CSV.</li>
-  <li><b>Komunikasi:</b> data dapat dikirim melalui MQTT.</li>
-  <li><b>Kesimpulan:</b> alat dapat digunakan sebagai prototipe pemantauan gerakan untuk kendaraan, drone, atau objek bergerak lainnya.</li>
-</ol>
-
-<h2>26. Keterbatasan</h2>
+<h2>19. Keterbatasan</h2>
 
 <ul>
   <li>Alat belum menggunakan GPS, sehingga belum mencatat lokasi.</li>
@@ -727,19 +614,8 @@ dan buzzer dapat bekerja secara bersamaan tanpa saling menghambat.
   <li>Sistem belum memenuhi standar keselamatan dan sertifikasi perangkat penerbangan.</li>
 </ul>
 
-<h2>27. Pengembangan Selanjutnya</h2>
 
-<ul>
-  <li>Menambahkan GPS untuk merekam posisi dan kecepatan.</li>
-  <li>Menambahkan modul RTC atau sinkronisasi NTP untuk tanggal dan waktu sebenarnya.</li>
-  <li>Menggunakan baterai dan sistem manajemen daya agar alat dapat bekerja mandiri.</li>
-  <li>Menambahkan casing pelindung dan peredam getaran.</li>
-  <li>Mengirim data ke database atau dashboard internet.</li>
-  <li>Menambahkan autentikasi pada dashboard web.</li>
-  <li>Melakukan pengujian ambang benturan pada beberapa jenis objek.</li>
-</ul>
-
-<h2>28. Referensi</h2>
+<h2>20. Referensi</h2>
 
 <p>
 Konsep awal proyek mengacu pada artikel
