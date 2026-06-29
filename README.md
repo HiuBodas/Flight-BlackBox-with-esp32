@@ -1,6 +1,6 @@
 <h2>Kelompok 2</h2>
 <P>1. khoirul umam(23552011428)</P>
-<p>2. Azmi Fauzan Alwan</p>
+<p>2. Azmi Fauzan Alwan (23552011349) </p>
 <p>3. Dianne Ramadhani (23552011364) </p>
 
 
